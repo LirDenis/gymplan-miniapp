@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>GYM PLAN – тёмный фитнес-апп</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #050413;
+      --bg-surface: #0a0a12;
+      --bg-soft: #11111d;
+      --accent: #7b61ff;
+      --accent-soft: #262046;
+      --accent-strong: #f05ad3;
+      --text-primary: #ffffff;
+      --text-secondary: #a3a5c7;
+      --text-muted: #6f708d;
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --pill: 999px;
+      --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.7);
+      --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.75);
+      --transition-fast: 0.18s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #1b1237 0, #050413 45%, #020109 100%);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ================= PHONE SHELL ================= */
+
+    .phone-shell {
+      flex: 1;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top, #181427 0, #050413 60%, #050413 100%);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #29223e;
+    }
+
+    .status-bar {
+      padding: 10px 16px 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-header {
+      padding: 8px 16px 10px;
+    }
+
+    .hello {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .date-line {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .content-scroll {
+      flex: 1;
+      padding: 0 16px 10px;
+      overflow-y: auto;
+    }
+
+    .screen {
+      display: none;
+      padding-bottom: 10px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .section-title-row {
+      padding: 0 0 6px;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .link-see {
+      font-size: 11px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* ================= UPCOMING CARD ================= */
+
+    .upcoming-card {
+      border-radius: 20px;
+      background:
+        linear-gradient(135deg, rgba(0,0,0,0.45), rgba(0,0,0,0.85)),
+        url("https://images.pexels.com/photos/7991652/pexels-photo-7991652.jpeg?auto=compress&cs=tinysrgb&w=600") center/cover no-repeat;
+      color: #ffffff;
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .upcoming-label {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+
+    .upcoming-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .upcoming-meta {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .upcoming-bottom {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .upcoming-time {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .btn-chip {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+      background: #ffffff;
+      color: #5e48ff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ================= CALENDAR LIST ON HOME ================= */
+
+    .calendar-list {
+      margin-top: 14px;
+      border-radius: var(--radius-lg);
+      background: #0f0f1b;
+      padding: 10px 10px 8px;
+      border: 1px solid #26243b;
+    }
+
+    .calendar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 6px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background var(--transition-fast), transform 0.05s;
+    }
+
+    .calendar-item:hover { background: #18162a; }
+
+    .calendar-item:active { transform: scale(0.99); }
+
+    .calendar-date {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: #141323;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .calendar-date strong {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .calendar-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .calendar-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .calendar-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .calendar-time {
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    /* ================= DETAILS SCREEN ================= */
+
+    .details-hero {
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.9)),
+        url("https://images.pexels.com/photos/6453395/pexels-photo-6453395.jpeg?auto=compress&cs=tinysrgb&w=600") center/cover no-repeat;
+      padding: 14px 14px 16px;
+      color: #ffffff;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .details-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.4);
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .details-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .details-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .details-card {
+      border-radius: var(--radius-lg);
+      background: #101021;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      border: 1px solid #25243c;
+    }
+
+    .details-card h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .details-card p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .plan-list {
+      border-radius: var(--radius-lg);
+      background: #101021;
+      padding: 10px 10px 8px;
+      border: 1px solid #25243c;
+    }
+
+    .exercise-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 4px;
+      border-radius: 12px;
+    }
+
+    .exercise-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #18162c;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .exercise-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .exercise-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .exercise-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .exercise-time {
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .back-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .back-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #141323;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* ================= METRICS SCREEN ================= */
+
+    .metrics-card {
+      border-radius: var(--radius-lg);
+      background: #101021;
+      padding: 12px 12px 10px;
+      margin-bottom: 12px;
+      border: 1px solid #25243c;
+    }
+
+    .metrics-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .metrics-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .metrics-chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--pill);
+      background: #18152f;
+      color: var(--accent);
+      cursor: pointer;
+      border: 1px solid #3b3564;
+    }
+
+    .metrics-main-value {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .metrics-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .chart {
+      margin-top: 10px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top, #2a234d 0, #141127 55%, #141127 100%);
+      padding: 10px 10px 8px;
+      border: 1px solid #342d5b;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-line {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 22px;
+      height: 80px;
+      background:
+        linear-gradient(to bottom, rgba(240, 90, 211,0.3), rgba(240, 90, 211,0)),
+        url("data:image/svg+xml,%3Csvg width='260' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60 Q40 70 60 55 T120 45 T180 20 T240 35' fill='none' stroke='%23f05ad3' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center/cover no-repeat;
+      border-radius: 12px;
+      opacity: 0.95;
+    }
+
+    .chart-xaxis {
+      margin-top: 90px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .metrics-tabs {
+      margin-top: 10px;
+      display: inline-flex;
+      padding: 3px;
+      border-radius: var(--pill);
+      background: #18152f;
+      font-size: 11px;
+      gap: 2px;
+    }
+
+    .metrics-tab {
+      padding: 5px 9px;
+      border-radius: var(--pill);
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .metrics-tab.active {
+      background: #262043;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .metrics-details {
+      margin-top: 10px;
+      border-radius: var(--radius-lg);
+      background: #101021;
+      padding: 8px 10px 6px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      border: 1px solid #25243c;
+    }
+
+    .metrics-details-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+
+    .metrics-change-pos { color: #4dd18b; }
+    .metrics-change-neg { color: #ff6e6e; }
+
+    /* ================= CALENDAR BIG SCREEN ================= */
+
+    .calendar-big-wrapper {
+      border-radius: var(--radius-lg);
+      background: #101021;
+      padding: 10px 12px 12px;
+      border: 1px solid #25243c;
+    }
+
+    .calendar-big-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .calendar-month {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .calendar-arrows {
+      display: flex;
+      gap: 4px;
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .calendar-grid {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .cal-day-name {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .cal-cell {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+    }
+
+    .cal-cell.active {
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .cal-cell.marked {
+      background: var(--accent-soft);
+      color: #c9c3ff;
+      font-weight: 500;
+    }
+
+    /* ================= BOTTOM NAV ================= */
+
+    .bottom-nav {
+      padding: 8px 16px 10px;
+      border-top: 1px solid #26223f;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      background: #070610;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 10px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .nav-item span { font-size: 16px; }
+
+    .nav-item.active { color: var(--accent); }
+
+    /* ================= OVERLAYS ================= */
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      padding: 18px 18px 22px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
+      color: #ffffff;
+      z-index: 10;
+      border: 1px solid #3c2f77;
+    }
+
+    .overlay.visible { display: flex; }
+
+    .welcome {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.8)),
+        radial-gradient(circle at top, #9f7bff 0, #6945ff 40%, #2c175e 85%);
+    }
+
+    .overlay-top { margin-top: 14px; }
+    .welcome-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--pill);
+      background: rgba(0,0,0,0.35);
+      font-size: 11px;
+    }
+
+    .welcome-title {
+      margin-top: 18px;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .welcome-sub {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.9);
+      max-width: 260px;
+    }
+
+    .overlay-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: var(--pill);
+      border: none;
+      outline: none;
+      background: #ffffff;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.08s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.9);
+      filter: brightness(0.97);
+    }
+
+    .btn-ghost {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: var(--pill);
+      border: 1px solid rgba(255,255,255,0.7);
+      background: transparent;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /* signup / details overlays */
+
+    .form-overlay {
+      background: radial-gradient(circle at top, #201a3c 0, #050413 60%, #050413 100%);
+    }
+
+    .form-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .form-back {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #141323;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .form-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .form-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .form-input {
+      border-radius: 14px;
+      border: 1px solid #2c2841;
+      background: #0b0a17;
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .unit-toggle-row {
+      display: inline-flex;
+      border-radius: 999px;
+      background: #141323;
+      padding: 3px;
+      gap: 2px;
+      margin-left: 6px;
+    }
+
+    .unit-btn {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .unit-btn.active {
+      background: #262043;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .form-footer-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 380px) {
+      .phone-shell { border-radius: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="phone-shell">
+      <!-- статус-бар -->
+      <div class="status-bar">
+        <div>9:41</div>
+        <div>⋯⋯⋯</div>
+      </div>
+
+      <!-- приветствие -->
+      <header class="home-header">
+        <div class="hello" id="helloText">Привет, D</div>
+        <div class="date-line" id="dateLine">10 ноября, вторник</div>
+      </header>
+
+      <!-- основной контент -->
+      <main class="content-scroll">
+        <!-- ГЛАВНЫЙ ЭКРАН -->
+        <section class="screen active" id="screen-home">
+          <div class="section-title-row">
+            <div class="section-title">Ближайшая тренировка</div>
+            <div class="link-see">Все</div>
+          </div>
+
+          <section class="upcoming-card" id="upcomingCard">
+            <div class="upcoming-label">Следующее занятие</div>
+            <div class="upcoming-title">Тренировка PUSH</div>
+            <div class="upcoming-meta">Грудь · Плечи · Трицепс</div>
+            <div class="upcoming-bottom">
+              <div class="upcoming-time">Сегодня · 50 минут</div>
+              <button class="btn-chip" type="button">Начать</button>
+            </div>
+          </section>
+
+          <section class="section-title-row" style="margin-top: 14px;">
+            <div class="section-title">Календарный план</div>
+          </section>
+
+          <section class="calendar-list" id="calendarList"></section>
+        </section>
+
+        <!-- ДЕТАЛИ ТРЕНИРОВКИ -->
+        <section class="screen" id="screen-details">
+          <div class="back-row" id="backFromDetails">
+            <div class="back-icon">←</div>
+            <span>Назад к плану</span>
+          </div>
+
+          <section class="details-hero">
+            <div class="details-pill">
+              <span>6 недель</span>·<span>18 тренировок</span>
+            </div>
+            <div class="details-title">Финальная тренировка после кардио</div>
+            <div class="details-label">Все тело · Средняя нагрузка</div>
+          </section>
+
+          <section class="details-card">
+            <h3>Описание</h3>
+            <p>
+              Устал после дня, много сидел или напрягался? Эта тренировка
+              поможет перезагрузиться: динамичная разминка, силовые блоки и
+              растяжка в конце.
+            </p>
+          </section>
+
+          <section class="plan-list" id="detailsPlan"></section>
+        </section>
+
+        <!-- МЕТРИКИ -->
+        <section class="screen" id="screen-metrics">
+          <section class="metrics-card">
+            <div class="metrics-title-row">
+              <div class="metrics-title">Прогресс метрик</div>
+              <div class="metrics-chip">Выбрать отчёт</div>
+            </div>
+            <div class="metrics-main-value" id="lastWeight">95.0 кг</div>
+            <div class="metrics-sub" id="metricsSub">Твой последний вес</div>
+
+            <div class="chart">
+              <div class="chart-line"></div>
+              <div class="chart-xaxis">
+                <span>2 ноя</span><span>9 ноя</span><span>16 ноя</span><span>23 ноя</span><span>30 ноя</span>
+              </div>
+            </div>
+
+            <div class="metrics-tabs">
+              <div class="metrics-tab active">Неделя</div>
+              <div class="metrics-tab">Месяц</div>
+              <div class="metrics-tab">3 месяца</div>
+              <div class="metrics-tab">Год</div>
+            </div>
+          </section>
+
+          <section class="metrics-details">
+            <div class="metrics-details-row">
+              <span>2 – 8 ноября</span>
+              <span class="metrics-change-pos">+0.5 кг</span>
+            </div>
+            <div class="metrics-details-row">
+              <span>30 сентября – 1 ноября</span>
+              <span class="metrics-change-neg">-0.5 кг</span>
+            </div>
+          </section>
+        </section>
+
+        <!-- КАЛЕНДАРЬ (КРУПНЫЙ) -->
+        <section class="screen" id="screen-calendar">
+          <section class="calendar-big-wrapper">
+            <div class="calendar-big-header">
+              <div class="calendar-month">
+                <span>Ноябрь 2020</span>
+              </div>
+              <div class="calendar-arrows">
+                <span>‹</span><span>›</span>
+              </div>
+            </div>
+
+            <div class="calendar-grid">
+              <div class="cal-day-name">Вс</div>
+              <div class="cal-day-name">Пн</div>
+              <div class="cal-day-name">Вт</div>
+              <div class="cal-day-name">Ср</div>
+              <div class="cal-day-name">Чт</div>
+              <div class="cal-day-name">Пт</div>
+              <div class="cal-day-name">Сб</div>
+
+              <div class="cal-cell"></div>
+              <div class="cal-cell">1</div>
+              <div class="cal-cell">2</div>
+              <div class="cal-cell">3</div>
+              <div class="cal-cell">4</div>
+              <div class="cal-cell">5</div>
+              <div class="cal-cell">6</div>
+              <div class="cal-cell">7</div>
+              <div class="cal-cell marked">8</div>
+              <div class="cal-cell">9</div>
+              <div class="cal-cell">10</div>
+              <div class="cal-cell">11</div>
+              <div class="cal-cell active">15</div>
+              <div class="cal-cell">16</div>
+              <div class="cal-cell marked">18</div>
+              <div class="cal-cell">19</div>
+              <div class="cal-cell">20</div>
+              <div class="cal-cell">21</div>
+              <div class="cal-cell">22</div>
+              <div class="cal-cell">23</div>
+              <div class="cal-cell">24</div>
+              <div class="cal-cell">25</div>
+              <div class="cal-cell">26</div>
+              <div class="cal-cell">27</div>
+              <div class="cal-cell">28</div>
+              <div class="cal-cell">29</div>
+              <div class="cal-cell">30</div>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <!-- нижняя навигация -->
+      <nav class="bottom-nav">
+        <div class="nav-item active" data-target="screen-home">
+          <span>🏋️‍♂️</span>
+          Тренировки
+        </div>
+        <div class="nav-item" data-target="screen-metrics">
+          <span>📊</span>
+          Метрики
+        </div>
+        <div class="nav-item" data-target="screen-calendar">
+          <span>📅</span>
+          Календарь
+        </div>
+        <div class="nav-item" data-target="screen-home">
+          <span>👤</span>
+          Профиль
+        </div>
+      </nav>
+    </div>
+
+    <!-- WELCOME OVERLAY -->
+    <section class="overlay welcome visible" id="welcomeOverlay">
+      <div class="overlay-top">
+        <div class="welcome-chip">
+          <span>💪</span> Фитнес-мини-приложение
+        </div>
+        <h1 class="welcome-title">Добро пожаловать<br>в GYM PLAN</h1>
+        <p class="welcome-sub">
+          Создай личный план тренировок, отслеживай прогресс и тренируйся
+          прямо внутри Telegram.
+        </p>
+      </div>
+      <div class="overlay-bottom">
+        <button class="btn-primary" id="btnGoSignup">Регистрация</button>
+        <button class="btn-ghost" id="btnLogin">Войти</button>
+      </div>
+    </section>
+
+    <!-- SIGNUP OVERLAY -->
+    <section class="overlay form-overlay" id="signupOverlay">
+      <div class="overlay-top">
+        <div class="form-header">
+          <div class="form-back" id="backFromSignup">←</div>
+          <div class="form-title">Регистрация</div>
+          <div></div>
+        </div>
+        <div class="form-sub">
+          Создай аккаунт, чтобы сохранять планы и прогресс. Потом это можно
+          привязать к аккаунту Telegram.
+        </div>
+
+        <form id="signupForm">
+          <div class="form-group">
+            <label class="form-label" for="nameInput">Имя</label>
+            <input class="form-input" id="nameInput" placeholder="Как к тебе обращаться?" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phoneInput">Телефон</label>
+            <input class="form-input" id="phoneInput" placeholder="+7..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="passInput">Пароль</label>
+            <input class="form-input" id="passInput" type="password" placeholder="Минимум 6 символов" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="passConfirmInput">Повтор пароля</label>
+            <input class="form-input" id="passConfirmInput" type="password" placeholder="Повтори пароль" />
+          </div>
+        </form>
+      </div>
+      <div class="overlay-bottom">
+        <button class="btn-primary" id="btnSignupSubmit">Создать аккаунт</button>
+        <div class="form-footer-hint">
+          Нажимая «Создать аккаунт», ты соглашаешься с тем, что приложение
+          хранит данные локально на твоём устройстве.
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAILS (HEIGHT/WEIGHT) OVERLAY -->
+    <section class="overlay form-overlay" id="detailsOverlay">
+      <div class="overlay-top">
+        <div class="form-header">
+          <div class="form-back" id="backFromDetailsOverlay">←</div>
+          <div class="form-title">Параметры тела</div>
+          <div></div>
+        </div>
+        <div class="form-sub">
+          Укажи рост и вес — по ним мы будем считать прогресс и подбирать
+          нагрузку.
+        </div>
+
+        <form id="detailsForm">
+          <div class="form-group">
+            <div class="form-label">
+              Рост
+              <span class="unit-toggle-row">
+                <span class="unit-btn active" data-unit-group="height" data-unit="cm">см</span>
+                <span class="unit-btn" data-unit-group="height" data-unit="inch">inch</span>
+              </span>
+            </div>
+            <input class="form-input" id="heightInput" placeholder="Например, 199" inputmode="decimal" />
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              Вес
+              <span class="unit-toggle-row">
+                <span class="unit-btn active" data-unit-group="weight" data-unit="kg">кг</span>
+                <span class="unit-btn" data-unit-group="weight" data-unit="lbs">lbs</span>
+              </span>
+            </div>
+            <input class="form-input" id="weightInput" placeholder="Например, 95" inputmode="decimal" />
+          </div>
+        </form>
+      </div>
+      <div class="overlay-bottom">
+        <button class="btn-primary" id="btnDetailsDone">Готово</button>
+        <div class="form-footer-hint">
+          Всё сохраняется только у тебя в браузере. Потом можно будет перенести
+          это на сервер.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ======= дата в шапке =======
+    const dateLine = document.getElementById("dateLine");
+    const now = new Date();
+    const options = { day: "numeric", month: "long", weekday: "long" };
+    const ruDate = now.toLocaleDateString("ru-RU", options);
+    dateLine.textContent = ruDate.charAt(0).toUpperCase() + ruDate.slice(1);
+
+    const helloText = document.getElementById("helloText");
+    const lastWeightEl = document.getElementById("lastWeight");
+    const metricsSubEl = document.getElementById("metricsSub");
+
+    // ======= календарь на главном =======
+    const calendarData = [
+      { day: 12, month: "ноя", title: "Силовой PUSH", coach: "Верх тела", time: "40 мин" },
+      { day: 16, month: "ноя", title: "Лёгкий FULL BODY", coach: "Утренний поток", time: "30 мин" },
+      { day: 18, month: "ноя", title: "День ног", coach: "Ноги + ягодицы", time: "55 мин" },
+    ];
+    const calendarList = document.getElementById("calendarList");
+    calendarData.forEach((item) => {
+      const div = document.createElement("div");
+      div.className = "calendar-item";
+      div.innerHTML = `
+        <div class="calendar-date">
+          <strong>${item.day}</strong>
+          <span>${item.month}</span>
+        </div>
+        <div class="calendar-main">
+          <div class="calendar-title">${item.title}</div>
+          <div class="calendar-sub">${item.coach}</div>
+        </div>
+        <div class="calendar-time">${item.time}</div>
+      `;
+      div.addEventListener("click", () => openScreen("screen-details"));
+      calendarList.appendChild(div);
+    });
+
+    // ======= план для экрана деталей =======
+    const detailsPlanData = [
+      { title: "Прыжки сплит-джамп", info: "2 подхода по 20 повторений", time: "40 мин" },
+      { title: "Разгибания спины", info: "3 подхода по 10 повторений", time: "20 мин" },
+      { title: "Жим ногами", info: "1 подход из 5 повторений", time: "10 мин" },
+      { title: "Жим лёжа", info: "5 подходов по 12 повторений", time: "25 мин" },
+      { title: "Отжимания в стойке на руках", info: "3 подхода до отказа", time: "33 мин" },
+    ];
+    const detailsPlan = document.getElementById("detailsPlan");
+    detailsPlanData.forEach((ex, idx) => {
+      const row = document.createElement("div");
+      row.className = "exercise-row";
+      row.innerHTML = `
+        <div class="exercise-num">${idx + 1}</div>
+        <div class="exercise-main">
+          <div class="exercise-title">${ex.title}</div>
+          <div class="exercise-sub">${ex.info}</div>
+        </div>
+        <div class="exercise-time">${ex.time}</div>
+      `;
+      detailsPlan.appendChild(row);
+    });
+
+    // ======= переключение экранов (внутри телефона) =======
+    const screens = document.querySelectorAll(".screen");
+    const navItems = document.querySelectorAll(".nav-item");
+
+    function openScreen(id) {
+      screens.forEach(s => s.classList.remove("active"));
+      const el = document.getElementById(id);
+      if (el) el.classList.add("active");
+      navItems.forEach(n => {
+        if (n.dataset.target === id) n.classList.add("active");
+        else if (n.dataset.target) n.classList.remove("active");
+      });
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener("click", () => {
+        const target = item.getAttribute("data-target");
+        openScreen(target);
+      });
+    });
+
+    document.getElementById("upcomingCard").addEventListener("click", () => {
+      openScreen("screen-details");
+    });
+    document.getElementById("backFromDetails").addEventListener("click", () => {
+      openScreen("screen-home");
+    });
+
+    // ======= OVERLAYS: welcome / signup / details =======
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    const signupOverlay = document.getElementById("signupOverlay");
+    const detailsOverlay = document.getElementById("detailsOverlay");
+
+    const btnGoSignup = document.getElementById("btnGoSignup");
+    const btnLogin = document.getElementById("btnLogin");
+    const backFromSignup = document.getElementById("backFromSignup");
+    const backFromDetailsOverlay = document.getElementById("backFromDetailsOverlay");
+    const btnSignupSubmit = document.getElementById("btnSignupSubmit");
+    const btnDetailsDone = document.getElementById("btnDetailsDone");
+
+    const nameInput = document.getElementById("nameInput");
+    const passInput = document.getElementById("passInput");
+    const passConfirmInput = document.getElementById("passConfirmInput");
+    const heightInput = document.getElementById("heightInput");
+    const weightInput = document.getElementById("weightInput");
+
+    // переключатели единиц
+    const unitButtons = document.querySelectorAll(".unit-btn");
+    unitButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const group = btn.dataset.unitGroup;
+        document.querySelectorAll(`.unit-btn[data-unit-group="${group}"]`).forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    btnGoSignup.addEventListener("click", () => {
+      welcomeOverlay.classList.remove("visible");
+      signupOverlay.classList.add("visible");
+    });
+
+    backFromSignup.addEventListener("click", () => {
+      signupOverlay.classList.remove("visible");
+      welcomeOverlay.classList.add("visible");
+    });
+
+    backFromDetailsOverlay.addEventListener("click", () => {
+      detailsOverlay.classList.remove("visible");
+      signupOverlay.classList.add("visible");
+    });
+
+    btnLogin.addEventListener("click", () => {
+      // имитация входа
+      welcomeOverlay.classList.remove("visible");
+    });
+
+    // обработка регистрации
+    btnSignupSubmit.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      const pass = passInput.value;
+      const pass2 = passConfirmInput.value;
+
+      if (!name) {
+        alert("Укажи имя.");
+        return;
+      }
+      if (pass.length < 4) {
+        alert("Пароль должен быть минимум 4 символа.");
+        return;
+      }
+      if (pass !== pass2) {
+        alert("Пароли не совпадают.");
+        return;
+      }
+
+      localStorage.setItem("gymplan_name", name);
+      helloText.textContent = `Привет, ${name}`;
+
+      signupOverlay.classList.remove("visible");
+      detailsOverlay.classList.add("visible");
+    });
+
+    // сохранение роста/веса
+    btnDetailsDone.addEventListener("click", () => {
+      const heightStr = heightInput.value.replace(",", ".").trim();
+      const weightStr = weightInput.value.replace(",", ".").trim();
+
+      const height = parseFloat(heightStr);
+      const weight = parseFloat(weightStr);
+
+      if (isNaN(height) || isNaN(weight)) {
+        alert("Введи рост и вес числом.");
+        return;
+      }
+
+      localStorage.setItem("gymplan_height", String(height));
+      localStorage.setItem("gymplan_weight", String(weight));
+
+      lastWeightEl.textContent = `${weight.toFixed(1)} кг`;
+      metricsSubEl.textContent = "Твой последний вес (из онбординга)";
+
+      detailsOverlay.classList.remove("visible");
+    });
+
+    // ======= загрузка сохранённых данных =======
+    const savedName = localStorage.getItem("gymplan_name");
+    const savedWeight = localStorage.getItem("gymplan_weight");
+
+    if (savedName) {
+      helloText.textContent = `Привет, ${savedName}`;
+      welcomeOverlay.classList.remove("visible");
+    }
+
+    if (savedWeight) {
+      const w = parseFloat(savedWeight);
+      if (!isNaN(w)) {
+        lastWeightEl.textContent = `${w.toFixed(1)} кг`;
+        metricsSubEl.textContent = "Твой последний сохранённый вес";
+      }
+    }
+  </script>
+</body>
+</html>
